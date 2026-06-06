@@ -110,7 +110,7 @@ export function CelebrationOverlay({
 
       {type === "minor" && (
         /* ==================== MINOR QUEST COMPLETE CELEBRATION ==================== */
-        <div className="relative w-full max-w-[640px] bg-surface-container-low tactile-card rounded-xl p-8 overflow-hidden animate-fade-in">
+        <div className="relative z-10 w-full max-w-2xl bg-gradient-to-b from-[#111] to-[#050505] border border-secondary/30 rounded-xl p-10 shadow-[0_0_100px_rgba(212,175,55,0.15)] animate-in zoom-in-95 fade-in duration-700 cursor-default" onClick={(e) => e.stopPropagation()}>
           {/* Subtle Texture Overlay */}
           <div className="absolute inset-0 parchment-texture opacity-30 pointer-events-none"></div>
 
@@ -197,7 +197,7 @@ export function CelebrationOverlay({
 
       {type === "major" && (
         /* ==================== MAJOR QUEST COMPLETE CELEBRATION ==================== */
-        <div className="relative w-full max-w-[720px] bg-surface-container-low rounded-xl tactile-card p-8 overflow-hidden animate-fade-in text-center flex flex-col items-center">
+        <div className="relative z-10 w-full max-w-lg bg-[#0A0E17] border border-white/10 rounded-lg p-8 shadow-[0_0_50px_rgba(30,58,138,0.3)] animate-in zoom-in-95 fade-in duration-500 cursor-default flex flex-col items-center text-center" onClick={(e) => e.stopPropagation()}>
           {/* Subtle Background Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-secondary-fixed/20 rounded-full blur-3xl animate-pulse pointer-events-none"></div>
           <div className="absolute inset-0 parchment-texture opacity-30 pointer-events-none"></div>

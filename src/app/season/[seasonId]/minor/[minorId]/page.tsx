@@ -3,24 +3,25 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { 
-  localGetQuests, 
-  localSaveQuest, 
-  localGetTasks, 
-  localSaveTask, 
-  localGetProfile, 
+import {
+  localGetQuests,
+  localSaveQuest,
+  localGetTasks,
+  localSaveTask,
+  localGetProfile,
   localSaveProfile,
-  generateUUID, 
-  DEFAULT_USER_ID 
+  generateUUID,
+  DEFAULT_USER_ID
 } from "@/lib/cosmos";
 import { CompletionGuard } from "@/components/CompletionGuard";
 import { CelebrationOverlay } from "@/components/CelebrationOverlay";
-import { 
-  triggerStandardClearConfetti, 
-  triggerCodexRollConfetti, 
+import { createPortal } from "react-dom";
+import {
+  triggerStandardClearConfetti,
+  triggerCodexRollConfetti,
   triggerRankPromotionConfetti,
   getXpYield,
-  checkRankProgression 
+  checkRankProgression
 } from "@/lib/celebration";
 
 export default function MinorQuestDetail() {
@@ -55,6 +56,10 @@ export default function MinorQuestDetail() {
   // Single-line reflection input
   const [quickReflection, setQuickReflection] = useState("");
 
+  // Edit Task State
+  const [editingTask, setEditingTask] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
+
   const loadData = async () => {
     try {
       const quests = await localGetQuests();
@@ -86,6 +91,7 @@ export default function MinorQuestDetail() {
   };
 
   useEffect(() => {
+    setMounted(true);
     loadData();
     window.addEventListener("local-db-update", loadData);
     return () => window.removeEventListener("local-db-update", loadData);
@@ -135,6 +141,19 @@ export default function MinorQuestDetail() {
       };
       await localSaveQuest(updated);
       setEditingCalibration(false);
+      window.dispatchEvent(new Event("local-db-update"));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Handle task edit submission
+  const handleSaveEditTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTask) return;
+    try {
+      await localSaveTask(editingTask);
+      setEditingTask(null);
       window.dispatchEvent(new Event("local-db-update"));
     } catch (err) {
       console.error(err);
@@ -307,19 +326,19 @@ export default function MinorQuestDetail() {
 
       {/* Grid Layout (Bento structure from template 220) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop mt-6">
-        
+
         {/* Left Column: Primary Details (8 Columns) */}
         <div className="lg:col-span-8 space-y-stack-md">
-          
+
           {/* Goal & Definition Card */}
           <article className="bg-surface-container-low journal-card rounded-xl p-6 md:p-8 relative overflow-hidden">
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-tertiary"></div>
-            
+
             <div className="flex items-center gap-2 mb-4 text-primary">
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>stars</span>
               <h3 className="font-headline-sm text-headline-sm">SMART Objective</h3>
             </div>
-            
+
             <p className="text-body-lg text-on-surface-variant mb-6 italic border-l-2 border-outline-variant/30 pl-4 py-1 font-serif">
               "{minorQuest.description}"
             </p>
@@ -331,7 +350,7 @@ export default function MinorQuestDetail() {
                 STAR Calibration Rules
               </h4>
               {!editingCalibration && (
-                <button 
+                <button
                   className="text-secondary text-xs font-semibold hover:underline"
                   onClick={() => setEditingCalibration(true)}
                 >
@@ -351,8 +370,8 @@ export default function MinorQuestDetail() {
               <form onSubmit={handleSaveCalibration} className="space-y-4 bg-surface-container-high/20 p-4 rounded-lg border border-outline-variant/20">
                 <div>
                   <label className="text-xs font-bold text-on-surface-variant block mb-1">⭐ 1★ Target (Routine checkoff):</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="w-full bg-surface border border-outline-variant/40 rounded-lg p-2 text-sm"
                     value={req1}
                     onChange={(e) => setReq1(e.target.value)}
@@ -361,8 +380,8 @@ export default function MinorQuestDetail() {
                 </div>
                 <div>
                   <label className="text-xs font-bold text-on-surface-variant block mb-1">⭐⭐ 2★ Target (Disciplined Execution):</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="w-full bg-surface border border-outline-variant/40 rounded-lg p-2 text-sm"
                     value={req2}
                     onChange={(e) => setReq2(e.target.value)}
@@ -371,8 +390,8 @@ export default function MinorQuestDetail() {
                 </div>
                 <div>
                   <label className="text-xs font-bold text-on-surface-variant block mb-1">⭐⭐⭐ 3★ Target (Codex Reflection log):</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="w-full bg-surface border border-outline-variant/40 rounded-lg p-2 text-sm"
                     value={req3}
                     onChange={(e) => setReq3(e.target.value)}
@@ -439,21 +458,24 @@ export default function MinorQuestDetail() {
               {tasks.map((task) => {
                 const isCompleted = task.status === "completed";
                 return (
-                  <div 
+                  <div
                     key={task.id}
-                    className={`raised-card bg-surface-container-lowest p-3 rounded-lg flex items-center justify-between border-l-4 border-outline-variant/20 hover:border-primary/20 transition-all ${
-                      isCompleted ? 'opacity-60 bg-surface-container-low' : ''
-                    }`}
+                    className={`raised-card bg-surface-container-lowest p-3 rounded-lg flex items-center justify-between border-l-4 border-outline-variant/20 hover:border-primary/20 transition-all cursor-pointer ${isCompleted ? 'opacity-60 bg-surface-container-low' : ''
+                      }`}
+                    onClick={() => setEditingTask(task)}
                   >
                     <div className="flex items-center gap-3">
-                      <input 
+                      <input
                         type="checkbox"
                         checked={isCompleted}
                         disabled={isCompleted}
                         onChange={() => handleTaskCheck(task)}
+                        onClick={(e) => e.stopPropagation()}
                         className="w-5 h-5 rounded text-secondary focus:ring-secondary cursor-pointer"
                       />
-                      <span className={`text-body-md text-primary leading-tight font-medium ${isCompleted ? 'line-through text-on-surface-variant' : ''}`}>
+                      <span
+                        className={`text-body-md text-primary leading-tight font-medium hover:text-secondary ${isCompleted ? 'line-through text-on-surface-variant' : ''}`}
+                      >
                         {task.title}
                       </span>
                     </div>
@@ -477,8 +499,8 @@ export default function MinorQuestDetail() {
             <form onSubmit={handleAddTask} className="mt-6 pt-6 border-t border-outline-variant/10 flex flex-wrap gap-3 items-end">
               <div className="flex-1 min-w-[200px]">
                 <label className="text-xs font-bold text-on-surface-variant block mb-1">New Sub-task Title:</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="w-full bg-surface border border-outline-variant/30 rounded-lg p-2 text-sm"
                   placeholder="e.g. Audit legacy endpoints..."
                   value={newTaskTitle}
@@ -488,8 +510,8 @@ export default function MinorQuestDetail() {
               </div>
               <div className="w-24">
                 <label className="text-xs font-bold text-on-surface-variant block mb-1">Est Mins:</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   className="w-full bg-surface border border-outline-variant/30 rounded-lg p-2 text-sm"
                   value={newTaskMinutes}
                   onChange={(e) => setNewTaskMinutes(Number(e.target.value))}
@@ -498,11 +520,11 @@ export default function MinorQuestDetail() {
                 />
               </div>
               <div className="flex items-center gap-1.5 h-10 select-none pb-2">
-                <input 
-                  type="checkbox" 
-                  id="mount-focus-today" 
-                  checked={mountToFocus} 
-                  onChange={(e) => setMountToFocus(e.target.checked)} 
+                <input
+                  type="checkbox"
+                  id="mount-focus-today"
+                  checked={mountToFocus}
+                  onChange={(e) => setMountToFocus(e.target.checked)}
                   className="rounded text-secondary focus:ring-secondary"
                 />
                 <label htmlFor="mount-focus-today" className="text-xs font-bold text-on-surface-variant cursor-pointer">Mount today</label>
@@ -519,8 +541,8 @@ export default function MinorQuestDetail() {
         <div className="lg:col-span-4 space-y-stack-md">
           {/* Quest Context Image */}
           <div className="rounded-xl overflow-hidden journal-card aspect-square relative group">
-            <img 
-              alt="Journaling workspace desk" 
+            <img
+              alt="Journaling workspace desk"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtxw0dT7vr19EyANO7yOMfhG7bjWT4DgZXIglq1bsnUyKvrTL6D5n-fze_UxwTWm0HCjM0PqK8ur7rwU-3GfWImmom3qmXzaF8qbkNYXjhUxtVYGRCpvLo0FFfXvqwzfjaUqEWWoDV4qNagq2rXUGHOgGaHc4FOSB_H8euBfR0ZzgKGQjzkJ6FSpaQ5WIaQnPz3ZY2uLTj5aqA6GOOlT_yoSRy0tSyoN6hImscejvdp5Wo_0DFI95TrbCSSYMwM8xV4TbVUUDsw9K_"
             />
@@ -564,14 +586,14 @@ export default function MinorQuestDetail() {
               </p>
             ) : (
               <div className="flex flex-col gap-2">
-                <textarea 
-                  className="w-full bg-surface-container border-0 border-b border-outline-variant p-2 font-body-md focus:ring-0 focus:border-primary transition-all resize-none text-xs" 
+                <textarea
+                  className="w-full bg-surface-container border-0 border-b border-outline-variant p-2 font-body-md focus:ring-0 focus:border-primary transition-all resize-none text-xs"
                   placeholder="Record reflection note..."
                   value={quickReflection}
                   onChange={(e) => setQuickReflection(e.target.value)}
                   rows={3}
                 />
-                <button 
+                <button
                   className="bg-primary text-on-primary py-1.5 px-3 rounded text-xs font-bold hover:bg-primary-container self-end"
                   onClick={handleSaveReflection}
                 >
@@ -619,6 +641,97 @@ export default function MinorQuestDetail() {
             <span className="font-headline-sm text-secondary uppercase tracking-widest text-[24px] font-extrabold">CLEARED</span>
           </div>
         </div>
+      )}
+
+      {/* Edit Task Modal */}
+      {editingTask && mounted && createPortal(
+        <div
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 transition-opacity cursor-pointer"
+          onClick={() => setEditingTask(null)}
+        >
+          <div
+            className="w-full max-w-[500px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture animate-in fade-in zoom-in-95 duration-200 shadow-2xl cursor-default"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center pb-4 border-b border-outline-variant/20 mb-6">
+              <h3 className="font-headline-sm text-primary flex items-center gap-2">
+                <span className="material-symbols-outlined">edit_square</span>
+                Edit Task
+              </h3>
+              <button className="text-on-surface-variant hover:text-primary" onClick={() => setEditingTask(null)}>
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            {editingTask.status === "completed" && (
+              <div className="bg-surface-container-high/40 p-4 rounded-lg border border-outline-variant/20 space-y-3 mb-6">
+                <div className="flex items-center gap-3">
+                  <span className="font-label-sm text-on-surface-variant uppercase tracking-wider font-bold text-xs">Status:</span>
+                  <span className="badge badge-slate uppercase tracking-wider text-[10px]">{editingTask.status}</span>
+                </div>
+                {editingTask.rating > 0 && (
+                  <div className="flex items-center gap-3">
+                    <span className="font-label-sm text-on-surface-variant uppercase tracking-wider font-bold text-xs">Rating Awarded:</span>
+                    <span className="text-secondary text-lg flex tracking-tighter" title={`${editingTask.rating} Star Rating`}>
+                      {Array.from({ length: editingTask.rating }).map((_, i) => "★").join("")}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <form onSubmit={handleSaveEditTask} className="space-y-4">
+              <div>
+                <label className="text-xs font-bold text-on-surface-variant block mb-1">Task Objective</label>
+                <input
+                  type="text"
+                  className="w-full bg-surface border border-outline-variant/40 rounded-lg p-3 text-sm"
+                  value={editingTask.title}
+                  onChange={(e) => setEditingTask({ ...editingTask, title: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-on-surface-variant block mb-1">Estimated Minutes</label>
+                <input
+                  type="number"
+                  className="w-full bg-surface border border-outline-variant/40 rounded-lg p-3 text-sm"
+                  value={editingTask.estimateMinutes}
+                  onChange={(e) => setEditingTask({ ...editingTask, estimateMinutes: Number(e.target.value) })}
+                  min={5}
+                  required
+                />
+              </div>
+              <div className="flex items-center gap-2 pt-2">
+                <input
+                  type="checkbox"
+                  id="edit-pin"
+                  checked={editingTask.isPinned || false}
+                  onChange={(e) => setEditingTask({ ...editingTask, isPinned: e.target.checked })}
+                  className="rounded text-secondary focus:ring-secondary w-5 h-5 cursor-pointer"
+                />
+                <label htmlFor="edit-pin" className="text-sm font-bold text-on-surface-variant cursor-pointer">Pin to Top (Priority)</label>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-outline-variant/20 flex justify-end gap-3">
+                <button
+                  type="button"
+                  className="px-6 py-2.5 rounded-lg font-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors"
+                  onClick={() => setEditingTask(null)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md hover:bg-primary-container transition-colors active:scale-95 shadow-md flex items-center gap-2"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>,
+        document.body
       )}
 
     </div>

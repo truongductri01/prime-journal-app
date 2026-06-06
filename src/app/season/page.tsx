@@ -453,11 +453,11 @@ export default function SeasonOverview() {
       {/* Create Major Modal (Stitch Create / Edit Quest Page Form Design) */}
       {isModalOpen && mounted && createPortal(
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 transition-opacity"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 transition-opacity cursor-pointer"
           onClick={() => setIsModalOpen(false)}
         >
           <div 
-            className="w-full max-w-[680px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture overflow-y-auto max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 shadow-2xl"
+            className="w-full max-w-[680px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture overflow-y-auto max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 shadow-2xl cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-4 border-b border-outline-variant/20 mb-6">

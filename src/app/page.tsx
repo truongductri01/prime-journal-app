@@ -115,14 +115,17 @@ export default function Home() {
 
         setActiveMajors(majorsWithProgress.slice(0, 3)); // Display up to 3 active Major Quests
 
-        // Get today's focus preview (first 5 queued items for today)
+        // Get today's focus preview (all queued items for today)
         const todayStr = new Date().toISOString().split("T")[0];
         const focusTasks = allTasks.filter(
-          (t) => t.executionDate === todayStr && t.status === "open"
+          (t) => t.executionDate === todayStr
         );
 
-        // Sort: pinned first
+        // Sort: open first, then pinned
         const sortedFocus = focusTasks.sort((a, b) => {
+          if (a.status !== b.status) {
+            return a.status === "open" ? -1 : 1;
+          }
           const aPin = a.isPinned ? 1 : 0;
           const bPin = b.isPinned ? 1 : 0;
           return bPin - aPin;
@@ -585,6 +588,16 @@ export default function Home() {
                         {task.isPinned && <span className="text-secondary mr-1">📌</span>}
                         {task.title}
                       </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {task.minorQuestId && (
+                          <span className="bg-tertiary-container text-on-tertiary-container text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">Quest</span>
+                        )}
+                        {task.status === "completed" && task.minorQuestId && task.rating > 0 && (
+                          <span className="text-secondary text-xs flex tracking-tighter opacity-80" title={`${task.rating} Star Rating`}>
+                            {Array.from({ length: task.rating }).map((_, i) => "★").join("")}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -681,11 +694,11 @@ export default function Home() {
       {/* Task Details Modal */}
       {viewingTask && mounted && createPortal(
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 transition-opacity"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 transition-opacity cursor-pointer"
           onClick={() => setViewingTask(null)}
         >
           <div 
-            className="w-full max-w-[500px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture animate-in fade-in zoom-in-95 duration-200 shadow-2xl"
+            className="w-full max-w-[500px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture animate-in fade-in zoom-in-95 duration-200 shadow-2xl cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-4 border-b border-outline-variant/20 mb-6">
@@ -700,12 +713,24 @@ export default function Home() {
             <div className="space-y-6">
                <div>
                  <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-2 font-bold">Objective</span>
-                 <p className="font-body-lg text-primary leading-snug">{viewingTask.title}</p>
+                 <p className="font-body-lg text-primary leading-snug flex items-center gap-3">
+                   {viewingTask.title}
+                   {viewingTask.minorQuestId && (
+                     <span className="bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider shadow-sm">Quest</span>
+                   )}
+                 </p>
                </div>
                <div className="grid grid-cols-2 gap-4">
                  <div className="bg-surface-container p-3 rounded-lg border border-outline-variant/20">
                    <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1 font-bold">Status</span>
-                   <span className="badge badge-slate uppercase tracking-wider text-[10px]">{viewingTask.status}</span>
+                   <div className="flex items-center gap-2">
+                     <span className="badge badge-slate uppercase tracking-wider text-[10px]">{viewingTask.status}</span>
+                     {viewingTask.status === "completed" && viewingTask.minorQuestId && viewingTask.rating > 0 && (
+                       <span className="text-secondary text-sm flex tracking-tighter" title={`${viewingTask.rating} Star Rating`}>
+                         {Array.from({ length: viewingTask.rating }).map((_, i) => "★").join("")}
+                       </span>
+                     )}
+                   </div>
                  </div>
                  <div className="bg-surface-container p-3 rounded-lg border border-outline-variant/20">
                    <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1 font-bold">Estimated Effort</span>
