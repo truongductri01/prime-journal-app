@@ -409,7 +409,8 @@ export default function MinorQuestDetail() {
                 <div className="p-4 rounded-lg bg-surface-container border border-outline-variant/10">
                   <div className="flex items-center gap-1 mb-2">
                     <span className="material-symbols-outlined text-secondary text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant font-bold">1★ Basic</span>
+                    {/* <span className="font-label-sm text-label-sm text-on-surface-variant font-bold">1★ Basic</span> */}
+                    <span className="font-label-sm text-label-sm text-on-surface-variant font-bold">Basic</span>
                   </div>
                   <p className="text-xs text-on-surface-variant leading-relaxed">{minorQuest.req1Star || "No rule configured"}</p>
                 </div>
@@ -418,7 +419,8 @@ export default function MinorQuestDetail() {
                   <div className="flex items-center gap-1 mb-2">
                     <span className="material-symbols-outlined text-secondary text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                     <span className="material-symbols-outlined text-secondary text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="font-label-sm text-label-sm text-primary font-bold">2★ Detailed</span>
+                    {/* <span className="font-label-sm text-label-sm text-primary font-bold">2★ Detailed</span> */}
+                    <span className="font-label-sm text-label-sm text-primary font-bold">Detailed</span>
                   </div>
                   <p className="text-xs text-primary leading-relaxed">{minorQuest.req2Star || "No rule configured"}</p>
                 </div>
@@ -428,7 +430,8 @@ export default function MinorQuestDetail() {
                     <span className="material-symbols-outlined text-secondary text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                     <span className="material-symbols-outlined text-secondary text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                     <span className="material-symbols-outlined text-secondary text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant font-bold">3★ Epic</span>
+                    {/* <span className="font-label-sm text-label-sm text-on-surface-variant font-bold">3★ Epic</span> */}
+                    <span className="font-label-sm text-label-sm text-on-surface-variant font-bold">Epic</span>
                   </div>
                   <p className="text-xs text-on-surface-variant leading-relaxed">{minorQuest.req3Star || "No rule configured"}</p>
                 </div>
@@ -463,7 +466,7 @@ export default function MinorQuestDetail() {
                     className={`raised-card bg-surface-container-lowest p-3 rounded-lg flex items-center justify-between border-l-4 border-outline-variant/20 hover:border-primary/20 transition-all ${isCompleted ? 'opacity-60 bg-surface-container-low' : ''}`}
                   >
                     <div className="flex items-center gap-3 w-full">
-                      <div 
+                      <div
                         className="flex-shrink-0 flex items-center cursor-pointer p-1 -m-1"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -492,7 +495,7 @@ export default function MinorQuestDetail() {
 
                     <div className="flex items-center gap-2">
                       {isCompleted && (
-                        <span className="text-[10px] bg-secondary-container/40 text-secondary px-2 py-0.5 rounded-full font-bold">
+                        <span className="text-[10px] bg-secondary-container/40 text-secondary px-2 py-0.5 rounded-full font-bold w-max">
                           {task.rating}★ Rating
                         </span>
                       )}
@@ -660,7 +663,7 @@ export default function MinorQuestDetail() {
           onClick={() => setEditingTask(null)}
         >
           <div
-            className="w-full max-w-[500px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture animate-in fade-in zoom-in-95 duration-200 shadow-2xl cursor-default"
+            className="w-full max-w-[500px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture animate-in fade-in zoom-in-95 duration-200 shadow-2xl cursor-pointer"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-4 border-b border-outline-variant/20 mb-6">

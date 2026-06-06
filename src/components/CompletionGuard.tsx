@@ -43,27 +43,27 @@ export function CompletionGuard({
   };
 
   return createPortal(
-    <div 
-      className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-opacity animate-fade-in"
+    <div
+      className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-opacity animate-fade-in cursor-pointer"
       onClick={onClose}
     >
-      <div 
-        className="w-full max-w-[600px] bg-surface-container-low p-8 rounded-xl border border-primary text-left raised-card parchment-texture shadow-2xl relative overflow-y-auto max-h-[90vh]"
+      <div
+        className="w-full max-w-[600px] bg-surface-container-low p-8 rounded-xl border border-primary text-left raised-card parchment-texture shadow-2xl relative overflow-y-auto max-h-[90vh] cursor-pointer"
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="font-headline-sm text-primary mb-2 border-b border-outline-variant/30 pb-4">
           Completion Guard: {taskTitle}
         </h3>
-        
+
         <p className="font-body-md text-on-surface-variant mb-6">
           Verify your execution quality to lock in your Experience Points (XP).
         </p>
 
         <form onSubmit={handleSubmit}>
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1.5rem" }}>
-            
+
             {/* 1 Star Option */}
-            <label 
+            <label
               style={{
                 display: "flex",
                 gap: "0.75rem",
@@ -74,10 +74,10 @@ export function CompletionGuard({
                 backgroundColor: rating === 1 ? "rgba(14, 165, 233, 0.05)" : "transparent",
               }}
             >
-              <input 
-                type="radio" 
-                name="rating" 
-                value={1} 
+              <input
+                type="radio"
+                name="rating"
+                value={1}
                 checked={rating === 1}
                 onChange={() => { setRating(1); setError(""); }}
                 style={{ marginTop: "0.25rem" }}
@@ -94,7 +94,7 @@ export function CompletionGuard({
             </label>
 
             {/* 2 Star Option */}
-            <label 
+            <label
               style={{
                 display: "flex",
                 gap: "0.75rem",
@@ -105,10 +105,10 @@ export function CompletionGuard({
                 backgroundColor: rating === 2 ? "rgba(14, 165, 233, 0.05)" : "transparent",
               }}
             >
-              <input 
-                type="radio" 
-                name="rating" 
-                value={2} 
+              <input
+                type="radio"
+                name="rating"
+                value={2}
                 checked={rating === 2}
                 onChange={() => { setRating(2); setError(""); }}
                 style={{ marginTop: "0.25rem" }}
@@ -125,7 +125,7 @@ export function CompletionGuard({
             </label>
 
             {/* 3 Star Option */}
-            <label 
+            <label
               style={{
                 display: "flex",
                 gap: "0.75rem",
@@ -136,10 +136,10 @@ export function CompletionGuard({
                 backgroundColor: rating === 3 ? "rgba(234, 179, 8, 0.05)" : "transparent",
               }}
             >
-              <input 
-                type="radio" 
-                name="rating" 
-                value={3} 
+              <input
+                type="radio"
+                name="rating"
+                value={3}
                 checked={rating === 3}
                 onChange={() => { setRating(3); setError(""); }}
                 style={{ marginTop: "0.25rem" }}
@@ -183,8 +183,8 @@ export function CompletionGuard({
             <button type="button" className="btn btn-secondary" onClick={onClose}>
               Cancel
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={`btn ${rating === 3 ? 'btn-gold' : 'btn-primary'}`}
             >
               Commit Clear

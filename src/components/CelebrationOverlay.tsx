@@ -44,7 +44,7 @@ export function CelebrationOverlay({
   if (!rendered || !isOpen || typeof document === 'undefined') return null;
 
   return createPortal(
-    <div 
+    <div
       className="fixed inset-0 z-[2000] flex items-center justify-center px-4 bg-primary/30 backdrop-blur-md transition-all duration-500 animate-fade-in"
       id="celebration-overlay"
     >
@@ -91,7 +91,7 @@ export function CelebrationOverlay({
           </div>
 
           {/* Action Button */}
-          <button 
+          <button
             className="relative z-10 w-full py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-sm hover:opacity-90 active:scale-[0.98] transition-all"
             onClick={() => onClose()}
           >
@@ -100,8 +100,8 @@ export function CelebrationOverlay({
 
           {/* Botanical Sprout Illustration */}
           <div className="mt-6 opacity-20 pointer-events-none w-full flex justify-center">
-            <img 
-              className="h-16 object-contain" 
+            <img
+              className="h-16 object-contain"
               alt="Sprouting seed illustration"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCv8zygIZGCr5aBTjzhM3sjggM18RMm2jNDxAiuQf_yGRVTa6Csm8qS9cqk1HWKZyM6t4xWRymGDHvgzZWzkSYE3So0jsVlWEMlcv4XWkpKvn4iCJk5RUw5HQ-OPmex036x7RXAo8nlFB1v6SZAfEcUtuEDGqjvOJ2fpAg8V970NLcDRDFJdB2jlyS38lNJBkIR2cMCvLJz6x28aLOTEKsd1RMqyJhh_VcLoYHYi7xJ_pDJ7a8JB6xYCaH5vr1ZaUfPse9kbOzQ1Pg"
             />
@@ -111,7 +111,7 @@ export function CelebrationOverlay({
 
       {type === "minor" && (
         /* ==================== MINOR QUEST COMPLETE CELEBRATION ==================== */
-        <div className="relative z-10 w-full max-w-2xl bg-gradient-to-b from-[#111] to-[#050505] border border-secondary/30 rounded-xl p-10 shadow-[0_0_100px_rgba(212,175,55,0.15)] animate-in zoom-in-95 fade-in duration-700 cursor-default" onClick={(e) => e.stopPropagation()}>
+        <div className="relative z-10 w-full max-w-2xl bg-gradient-to-b from-[#111] to-[#050505] border border-secondary/30 rounded-xl p-10 shadow-[0_0_100px_rgba(212,175,55,0.15)] animate-in zoom-in-95 fade-in duration-700 cursor-pointer" onClick={(e) => e.stopPropagation()}>
           {/* Subtle Texture Overlay */}
           <div className="absolute inset-0 parchment-texture opacity-30 pointer-events-none"></div>
 
@@ -173,7 +173,7 @@ export function CelebrationOverlay({
                   "What was the most important lesson in this chapter?"
                 </blockquote>
                 <div className="w-full relative">
-                  <textarea 
+                  <textarea
                     className="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-outline-variant focus:border-primary focus:ring-0 font-body-lg text-body-lg text-primary placeholder:text-outline/50 py-2 resize-none text-center"
                     placeholder="Briefly reflect on your execution..."
                     rows={1}
@@ -185,7 +185,7 @@ export function CelebrationOverlay({
             </section>
 
             <footer className="flex flex-col md:flex-row gap-4 w-full justify-center">
-              <button 
+              <button
                 className="px-8 py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:opacity-90 transition-all shadow-sm"
                 onClick={() => onClose(reflection)}
               >
@@ -198,7 +198,7 @@ export function CelebrationOverlay({
 
       {type === "major" && (
         /* ==================== MAJOR QUEST COMPLETE CELEBRATION ==================== */
-        <div className="relative z-10 w-full max-w-lg bg-[#0A0E17] border border-white/10 rounded-lg p-8 shadow-[0_0_50px_rgba(30,58,138,0.3)] animate-in zoom-in-95 fade-in duration-500 cursor-default flex flex-col items-center text-center" onClick={(e) => e.stopPropagation()}>
+        <div className="relative z-10 w-full max-w-lg bg-[#0A0E17] border border-white/10 rounded-lg p-8 shadow-[0_0_50px_rgba(30,58,138,0.3)] animate-in zoom-in-95 fade-in duration-500 cursor-pointer flex flex-col items-center text-center" onClick={(e) => e.stopPropagation()}>
           {/* Subtle Background Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-secondary-fixed/20 rounded-full blur-3xl animate-pulse pointer-events-none"></div>
           <div className="absolute inset-0 parchment-texture opacity-30 pointer-events-none"></div>
@@ -223,7 +223,7 @@ export function CelebrationOverlay({
           <div className="w-full bg-[#fdf9f0] border border-outline-variant/30 rounded-xl p-6 text-left relative overflow-hidden mb-6">
             <div className="absolute left-0 top-0 bottom-0 w-2 bg-tertiary"></div>
             <h3 className="font-headline-sm text-primary mb-2">{title}</h3>
-            
+
             {/* Limit Break / Black Clover Promoted Text */}
             <div className="bg-primary-container/20 border-l-4 border-secondary p-3 rounded-r-lg mb-4">
               <p className="text-[10px] font-bold uppercase tracking-wider text-secondary mb-1">
@@ -233,7 +233,7 @@ export function CelebrationOverlay({
                 {promotionMessage || "You have successfully closed this major quest. Your discipline and execution are recorded in the Ledger."}
               </p>
             </div>
-            
+
             {description && (
               <p className="font-body-md text-on-surface-variant italic leading-relaxed">
                 "{description}"
@@ -248,7 +248,7 @@ export function CelebrationOverlay({
             <span className="font-label-sm text-label-sm text-on-surface-variant tracking-widest uppercase">LEGEND</span>
           </div>
 
-          <button 
+          <button
             className="w-full max-w-sm py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-md hover:opacity-90 transition-all"
             onClick={() => onClose()}
           >

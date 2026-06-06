@@ -139,7 +139,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
                   <div
                     key={task.id}
                     onClick={() => toggleCommitTask(task.id)}
-                    className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${isCommitted ? 'border-secondary bg-secondary-container/20 font-bold' : 'border-outline-variant/20 hover:bg-surface-container'
+                    className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all cursor-pointer ${isCommitted ? 'border-secondary bg-secondary-container/20 font-bold' : 'border-outline-variant/20 hover:bg-surface-container'
                       }`}
                   >
                     <div className="flex items-center gap-3">
@@ -180,7 +180,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
       {/* 1. Global Header */}
       <header className="flex justify-between items-center w-full px-4 h-16 bg-surface border-b border-outline-variant/20 sticky top-0 z-30">
         <div className="flex items-center gap-3">
-          <button 
+          <button
             onClick={() => setIsSidebarOpen(true)}
             className="p-1 text-primary hover:bg-surface-container-high rounded-full transition-colors flex items-center justify-center"
           >
@@ -202,17 +202,16 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 
       {/* Sidebar Backdrop Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity cursor-pointer"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* 2. SideNavBar (Collapsible Modal) */}
-      <aside 
-        className={`flex flex-col p-4 gap-4 h-full w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant/10 z-50 transform transition-transform duration-300 ease-in-out shadow-2xl ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+      <aside
+        className={`flex flex-col p-4 gap-4 h-full w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant/10 z-50 transform transition-transform duration-300 ease-in-out shadow-2xl ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
       >
         <div className="mt-4 px-4 mb-4">
           <h2 className="font-headline-sm text-headline-sm text-primary leading-tight">Quest Journey</h2>
@@ -223,8 +222,8 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
           <Link
             href="/"
             className={`flex items-center gap-stack-sm px-4 py-3 rounded-lg font-label-md transition-all active:scale-[0.98] ${pathname === "/"
-                ? 'bg-secondary-container text-on-secondary-container font-semibold'
-                : 'text-on-surface-variant hover:bg-surface-container-high'
+              ? 'bg-secondary-container text-on-secondary-container font-semibold'
+              : 'text-on-surface-variant hover:bg-surface-container-high'
               }`}
           >
             <span className="material-symbols-outlined">home</span>
@@ -233,8 +232,8 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
           <Link
             href="/season"
             className={`flex items-center gap-stack-sm px-4 py-3 rounded-lg font-label-md transition-all active:scale-[0.98] ${pathname.startsWith("/season")
-                ? 'bg-secondary-container text-on-secondary-container font-semibold'
-                : 'text-on-surface-variant hover:bg-surface-container-high'
+              ? 'bg-secondary-container text-on-secondary-container font-semibold'
+              : 'text-on-surface-variant hover:bg-surface-container-high'
               }`}
           >
             <span className="material-symbols-outlined">auto_stories</span>
@@ -243,8 +242,8 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
           <Link
             href="/focus"
             className={`flex items-center gap-stack-sm px-4 py-3 rounded-lg font-label-md transition-all active:scale-[0.98] ${pathname === "/focus"
-                ? 'bg-secondary-container text-on-secondary-container font-semibold'
-                : 'text-on-surface-variant hover:bg-surface-container-high'
+              ? 'bg-secondary-container text-on-secondary-container font-semibold'
+              : 'text-on-surface-variant hover:bg-surface-container-high'
               }`}
           >
             <span className="material-symbols-outlined">track_changes</span>

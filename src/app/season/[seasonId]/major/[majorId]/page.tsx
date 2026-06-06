@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { 
-  localGetQuests, 
-  localSaveQuest, 
-  localGetTasks, 
-  generateUUID, 
+import {
+  localGetQuests,
+  localSaveQuest,
+  localGetTasks,
+  generateUUID,
   DEFAULT_USER_ID,
   localGetProfile,
   localSaveProfile
@@ -38,7 +38,7 @@ export default function MajorQuestDetail() {
   // Finalize Major state
   const [showFinalizeModal, setShowFinalizeModal] = useState(false);
   const [satisfactionScore, setSatisfactionScore] = useState<number>(5);
-  
+
   // Celebration overlay state
   const [celebrationInfo, setCelebrationInfo] = useState<any>(null);
 
@@ -51,7 +51,7 @@ export default function MajorQuestDetail() {
       if (major) {
         // Find minor quests under this major quest
         const minors = quests.filter((q) => q.majorQuestId === majorId);
-        
+
         // Find tasks linked to these minors
         const allTasks = await localGetTasks();
         const minorIds = minors.map(m => m.id);
@@ -115,7 +115,7 @@ export default function MajorQuestDetail() {
       setMinorTitle("");
       setMinorDesc("");
       setShowAddMinor(false);
-      
+
       window.dispatchEvent(new Event("local-db-update"));
     } catch (err) {
       console.error(err);
@@ -223,7 +223,7 @@ export default function MajorQuestDetail() {
 
   return (
     <div className="max-w-[800px] mx-auto flex flex-col gap-stack-lg relative">
-      
+
       {/* Back link */}
       <nav className="flex items-center gap-2 text-on-surface-variant opacity-70">
         <span className="material-symbols-outlined text-[18px]">chevron_left</span>
@@ -235,7 +235,7 @@ export default function MajorQuestDetail() {
       {/* Hero Header Section */}
       <div className="page-canvas p-6 md:p-8 rounded-2xl relative overflow-hidden">
         <div className={`absolute top-0 left-0 w-1.5 h-full ${isFinancial ? 'bg-secondary-fixed' : 'bg-secondary'}`}></div>
-        
+
         <div className="flex flex-col gap-2 mb-6">
           <div className="flex items-center gap-2 text-secondary font-label-md tracking-widest font-bold uppercase">
             <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
@@ -256,7 +256,7 @@ export default function MajorQuestDetail() {
               </span>
             </div>
           </div>
-          
+
           <div className="flex flex-col gap-1 w-full md:w-48">
             <div className="flex justify-between items-end mb-1">
               <span className="font-label-sm text-on-surface-variant uppercase tracking-tighter text-[10px]">Overall Progress</span>
@@ -298,13 +298,13 @@ export default function MajorQuestDetail() {
           {minorQuests.map((minor) => {
             const isCompleted = minor.progressPercent === 100;
             return (
-              <div 
+              <div
                 key={minor.id}
-                className={`raised-card p-4 rounded-xl flex items-center justify-between border-l-4 transition-all ${
-                  isCompleted 
-                    ? 'bg-surface-container-low border-tertiary/40' 
+                className={`raised-card p-4 rounded-xl flex items-center justify-between border-l-4 transition-all cursor-pointer
+                  ${isCompleted
+                    ? 'bg-surface-container-low border-tertiary/40'
                     : 'bg-surface-container-lowest border-secondary hover:translate-x-1 cursor-pointer'
-                }`}
+                  }`}
                 onClick={() => router.push(`/season/${seasonId}/minor/${minor.id}`)}
               >
                 <div className="flex items-center gap-4">
@@ -333,7 +333,7 @@ export default function MajorQuestDetail() {
         {/* Add Minor Quest Trigger & Form (CR-8) */}
         <div className="mt-2">
           {!showAddMinor ? (
-            <button 
+            <button
               className="text-secondary font-label-md flex items-center gap-1 hover:underline"
               onClick={() => setShowAddMinor(true)}
             >
@@ -345,24 +345,24 @@ export default function MajorQuestDetail() {
               <form onSubmit={handleAddMinorQuest} className="space-y-4">
                 <div>
                   <label className="font-label-md text-label-md text-on-surface-variant block mb-1.5 font-bold uppercase tracking-wider">Title</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="w-full bg-surface border-0 border-b-2 border-outline-variant focus:border-primary focus:ring-0 font-body-md py-2.5 px-2"
                     placeholder="e.g. Conduct user feedback research sessions..."
                     value={minorTitle}
                     onChange={(e) => setMinorTitle(e.target.value)}
-                    required 
+                    required
                   />
                 </div>
                 <div>
                   <label className="font-label-md text-label-md text-on-surface-variant block mb-1.5 font-bold uppercase tracking-wider">SMART Objective Description</label>
-                  <textarea 
+                  <textarea
                     className="w-full bg-surface border border-outline-variant/30 rounded-lg p-3 font-body-md"
                     placeholder="Describe specific tasks, timelines, and quantitative targets..."
                     value={minorDesc}
                     onChange={(e) => setMinorDesc(e.target.value)}
                     rows={2}
-                    required 
+                    required
                   />
                 </div>
 
@@ -371,8 +371,8 @@ export default function MajorQuestDetail() {
                   <span className="font-label-sm text-primary font-bold uppercase tracking-widest block">STAR Economy Calibrations</span>
                   <div>
                     <label className="text-xs text-on-surface-variant block mb-1 font-semibold">⭐ 1★ Mechanic Target (Routine Clear):</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="w-full bg-surface border-0 border-b border-outline-variant/40 focus:ring-0 focus:border-primary py-1.5 px-2 text-sm"
                       value={minorReq1}
                       onChange={(e) => setMinorReq1(e.target.value)}
@@ -380,8 +380,8 @@ export default function MajorQuestDetail() {
                   </div>
                   <div>
                     <label className="text-xs text-on-surface-variant block mb-1 font-semibold">⭐⭐ 2★ System Target (Disciplined Execution):</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="w-full bg-surface border-0 border-b border-outline-variant/40 focus:ring-0 focus:border-primary py-1.5 px-2 text-sm"
                       value={minorReq2}
                       onChange={(e) => setMinorReq2(e.target.value)}
@@ -389,8 +389,8 @@ export default function MajorQuestDetail() {
                   </div>
                   <div>
                     <label className="text-xs text-on-surface-variant block mb-1 font-semibold">⭐⭐⭐ 3★ Codex Exception Target (Manual Reflection):</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="w-full bg-surface border-0 border-b border-outline-variant/40 focus:ring-0 focus:border-primary py-1.5 px-2 text-sm"
                       value={minorReq3}
                       onChange={(e) => setMinorReq3(e.target.value)}
@@ -439,8 +439,8 @@ export default function MajorQuestDetail() {
 
       {/* Visual Context Image */}
       <div className="w-full h-56 rounded-2xl overflow-hidden raised-card relative">
-        <img 
-          alt="Desk blueprints illustration" 
+        <img
+          alt="Desk blueprints illustration"
           className="w-full h-full object-cover grayscale-[0.2] brightness-[0.9]"
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsHG_uqtB6qJmsww067kNNcw30FIxtVbz9svQD-LXOtjTaFNoD19BS6m19_K8bwzTkGx__DLuHjd0JPFvT1zo6D5QhUeyDLUYprFh06y1LUPNGBB3B3-xMNApLH-xDMX62eCPO3HhqhydM1kbVpY2Ix9Lj24m8hieQyTKQ5zN45fIZ-a_--1Fdb4VNatYBy_W88xKBwRZNdJHSlew3rttkEbpTQR0l6fzLeWgm49bXgdBNqvBGRlsKplQ4_aBIy8eS0ripsQ2OWjh4"
         />
@@ -454,7 +454,7 @@ export default function MajorQuestDetail() {
       {/* Action buttons */}
       {majorQuest.status === "active" && (
         <div className="flex flex-col md:flex-row gap-4 mt-2">
-          <button 
+          <button
             className="flex-1 bg-primary text-on-primary py-4 rounded-xl font-label-md flex items-center justify-center gap-2 hover:bg-primary-container transition-all active:scale-[0.98] shadow-md font-bold uppercase tracking-wider"
             onClick={() => setShowFinalizeModal(true)}
           >
@@ -493,8 +493,8 @@ export default function MajorQuestDetail() {
 
             <div className="flex justify-center gap-3">
               <button className="btn btn-secondary text-xs" onClick={() => setShowFinalizeModal(false)}>Cancel</button>
-              <button 
-                className="btn btn-gold text-xs" 
+              <button
+                className="btn btn-gold text-xs"
                 onClick={() => {
                   setShowFinalizeModal(false);
                   handleFinalizeMajorQuest();

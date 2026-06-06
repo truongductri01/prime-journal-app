@@ -9,7 +9,7 @@ export function TacticalConsole() {
   const [activeMajors, setActiveMajors] = useState<any[]>([]);
   const [selectedMajorId, setSelectedMajorId] = useState("");
   const [instantiated, setInstantiated] = useState(false);
-  
+
   const consoleRef = useRef<HTMLDivElement>(null);
 
   // Monitor keyboard shortcut Cmd/Ctrl + K
@@ -65,7 +65,7 @@ export function TacticalConsole() {
         const parts = rawText.split(" ");
         const ticker = parts[0] || "UNKNOWN";
         const strategy = parts.slice(1).join(" ") || "Option Strategy";
-        
+
         payload = {
           command,
           text: rawText,
@@ -125,9 +125,9 @@ export function TacticalConsole() {
 
   return (
     <div className="clover-modal-overlay" style={{ zIndex: 3000 }}>
-      <div 
+      <div
         ref={consoleRef}
-        className="card" 
+        className="card"
         style={{
           width: "90%",
           maxWidth: "650px",
@@ -163,13 +163,13 @@ export function TacticalConsole() {
           </div>
           <div style={{ display: "flex", gap: "1rem", marginTop: "0.5rem", fontSize: "0.8rem", color: "var(--ink-secondary)" }}>
             <span>Quick templates (Click to insert):</span>
-            <span 
+            <span
               onClick={() => setInputVal("/breakdown-quest Implement distributed message broker")}
               style={{ cursor: "pointer", textDecoration: "underline", color: "var(--azure-blue)" }}
             >
               /breakdown-quest
             </span>
-            <span 
+            <span
               onClick={() => setInputVal("/verify-trade TSLA Buy $200 LEAPS Call - Stop Loss at 180")}
               style={{ cursor: "pointer", textDecoration: "underline", color: "var(--azure-blue)" }}
             >
@@ -195,7 +195,7 @@ export function TacticalConsole() {
                     <h4 style={{ marginBottom: "0.5rem", color: "var(--azure-blue)" }}>
                       System Suggested Minor Quests:
                     </h4>
-                    
+
                     <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1.5rem" }}>
                       {response.data.quests?.map((q: any, i: number) => (
                         <div key={i} style={{ padding: "0.75rem", border: "1px solid var(--border-color)", borderRadius: "8px" }}>
@@ -216,8 +216,8 @@ export function TacticalConsole() {
                           Instantiate into Major Quest:
                         </label>
                         <div style={{ display: "flex", gap: "0.5rem" }}>
-                          <select 
-                            className="input-text" 
+                          <select
+                            className="input-text"
                             style={{ padding: "0.5rem", fontSize: "0.9rem" }}
                             value={selectedMajorId}
                             onChange={(e) => setSelectedMajorId(e.target.value)}
@@ -226,9 +226,9 @@ export function TacticalConsole() {
                               <option key={m.id} value={m.id}>{m.title}</option>
                             ))}
                           </select>
-                          <button 
-                            className="btn btn-gold" 
-                            onClick={handleInstantiate} 
+                          <button
+                            className="btn btn-gold"
+                            onClick={handleInstantiate}
                             disabled={instantiated}
                             style={{ flexShrink: 0 }}
                           >
@@ -265,7 +265,7 @@ export function TacticalConsole() {
                         {response.data.compliant ? "COMPLIANT" : "VIOLATION DETECTED"}
                       </span>
                     </div>
-                    
+
                     <p style={{ margin: "0.5rem 0", fontWeight: 500 }}>
                       {response.data.reason}
                     </p>

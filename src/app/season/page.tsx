@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
-import { 
-  localGetSeasons, 
-  localGetQuests, 
-  localSaveQuest, 
+import {
+  localGetSeasons,
+  localGetQuests,
+  localSaveQuest,
   localGetTasks,
-  generateUUID, 
-  DEFAULT_USER_ID 
+  generateUUID,
+  DEFAULT_USER_ID
 } from "@/lib/cosmos";
 
 export default function SeasonOverview() {
@@ -94,13 +94,13 @@ export default function SeasonOverview() {
       };
 
       await localSaveQuest(newMajor);
-      
+
       // Reset form
       setNewMajorTitle("");
       setNewMajorDesc("");
       setNewMajorEffort("Detailed");
       setIsModalOpen(false);
-      
+
       window.dispatchEvent(new Event("local-db-update"));
     } catch (err) {
       console.error(err);
@@ -159,7 +159,7 @@ export default function SeasonOverview() {
   const majorsWithStats = filteredMajors.map((major) => {
     const minors = allQuests.filter((q) => q.majorQuestId === major.id);
     const minorIds = minors.map((m) => m.id);
-    
+
     // Tasks linked to minors or directly to major
     const questTasks = allTasks.filter(
       (t) => t.minorQuestId && (minorIds.includes(t.minorQuestId) || t.minorQuestId === major.id)
@@ -205,7 +205,7 @@ export default function SeasonOverview() {
 
   return (
     <div className="flex flex-col gap-stack-lg">
-      
+
       {/* Header Section */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-4 border-b border-outline-variant/20">
         <div>
@@ -223,8 +223,8 @@ export default function SeasonOverview() {
             </div>
             <span className="font-label-md text-primary font-bold">{overallSeasonProgress}%</span>
           </div>
-          <button 
-            className="bg-primary text-on-primary font-label-md px-5 py-2.5 rounded-lg hover:bg-primary-container transition-colors mt-4 w-full text-center" 
+          <button
+            className="bg-primary text-on-primary font-label-md px-5 py-2.5 rounded-lg hover:bg-primary-container transition-colors mt-4 w-full text-center"
             onClick={handleOpenCreateModal}
           >
             + Create Major Quest
@@ -238,9 +238,9 @@ export default function SeasonOverview() {
           <span className="material-symbols-outlined text-sm">filter_list</span>
           Filter Ledger:
         </span>
-        
+
         <div className="flex flex-col gap-0.5 flex-1 min-w-[150px]">
-          <select 
+          <select
             className="w-full bg-surface border-0 border-b border-outline-variant focus:ring-0 focus:border-primary py-2 px-1 text-sm font-label-md"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
@@ -253,7 +253,7 @@ export default function SeasonOverview() {
         </div>
 
         <div className="flex flex-col gap-0.5 flex-1 min-w-[150px]">
-          <select 
+          <select
             className="w-full bg-surface border-0 border-b border-outline-variant focus:ring-0 focus:border-primary py-2 px-1 text-sm font-label-md"
             value={impactFilter}
             onChange={(e) => setImpactFilter(e.target.value)}
@@ -266,7 +266,7 @@ export default function SeasonOverview() {
         </div>
 
         <div className="flex flex-col gap-0.5 flex-1 min-w-[150px]">
-          <select 
+          <select
             className="w-full bg-surface border-0 border-b border-outline-variant focus:ring-0 focus:border-primary py-2 px-1 text-sm font-label-md"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -281,7 +281,7 @@ export default function SeasonOverview() {
 
       {/* Major Journey Map Grid */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-stack-md">
-        
+
         {/* Pivotal Quest Card (Large 8-Column Banner) */}
         {pivotalQuest ? (
           <section className="md:col-span-8">
@@ -316,8 +316,8 @@ export default function SeasonOverview() {
                     <span className="text-primary font-bold">{pivotalQuest.progressPercent}%</span>
                   </div>
                   <div className="w-full h-3 inset-track rounded-full overflow-hidden">
-                    <div 
-                      className="bg-gradient-to-r from-tertiary-container to-secondary-container h-full rounded-full transition-all duration-1000" 
+                    <div
+                      className="bg-gradient-to-r from-tertiary-container to-secondary-container h-full rounded-full transition-all duration-1000"
                       style={{ width: `${pivotalQuest.progressPercent}%` }}
                     ></div>
                   </div>
@@ -390,8 +390,8 @@ export default function SeasonOverview() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
             {auxiliaryQuests.map((quest) => (
-              <div 
-                key={quest.id} 
+              <div
+                key={quest.id}
                 className="quest-card p-6 rounded-xl accent-line-sage relative overflow-hidden group hover:border-primary/30 transition-all flex flex-col justify-between"
               >
                 <div>
@@ -408,7 +408,7 @@ export default function SeasonOverview() {
                     {quest.description}
                   </p>
                 </div>
-                
+
                 <div className="space-y-3 pt-4 border-t border-outline-variant/10">
                   <div className="flex justify-between items-center text-xs font-semibold">
                     <span className="text-on-surface-variant">Progress</span>
@@ -427,9 +427,9 @@ export default function SeasonOverview() {
       {/* Visual Explorer View Map Section (Static layout matching design) */}
       <section className="mt-8">
         <div className="bg-surface-container h-[300px] rounded-xl relative flex items-center justify-center overflow-hidden border border-outline-variant/10 shadow-inner">
-          <img 
-            alt="Journey map forest backdrop" 
-            className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-multiply" 
+          <img
+            alt="Journey map forest backdrop"
+            className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-multiply"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhI8cME-ZQR7VfzhvzXEHgySL03y3UqqCBzWYeRkiU4MXGR8Rjthu43vVk8rHRegILBHW0GyzNL6n-NJbPjYsIJoNfk_T8ov6PCfZusgAIcTe-KKv_AOnk94aYKLRysGo5PimQR_FsDlIRE_WDiUz0sctHMd4-2FupJBV7OUIKy6mEQrLFsSPUvPFlCY8_itiyLZW7AYxHNIQsybIftJFJY78V9WyCDX8j2GEmVjqoav-PBXpSAVpTENjZRIlIPJONqNjuYNjrbVyz"
           />
           <div className="relative text-center max-w-lg px-6 z-10">
@@ -452,12 +452,12 @@ export default function SeasonOverview() {
 
       {/* Create Major Modal (Stitch Create / Edit Quest Page Form Design) */}
       {isModalOpen && mounted && createPortal(
-        <div 
+        <div
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 transition-opacity cursor-pointer"
           onClick={() => setIsModalOpen(false)}
         >
-          <div 
-            className="w-full max-w-[680px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture overflow-y-auto max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 shadow-2xl cursor-default"
+          <div
+            className="w-full max-w-[680px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture overflow-y-auto max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 shadow-2xl cursor-pointer"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-4 border-b border-outline-variant/20 mb-6">
@@ -469,7 +469,7 @@ export default function SeasonOverview() {
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
-            
+
             {errorMsg ? (
               <div className="mb-6 p-4 bg-error-container text-on-error-container rounded-lg font-body-md">
                 <p className="font-semibold">{errorMsg}</p>
@@ -479,17 +479,17 @@ export default function SeasonOverview() {
               </div>
             ) : (
               <form onSubmit={handleCreateMajorQuest} className="space-y-6">
-                
+
                 {/* Title */}
                 <div>
                   <label className="font-label-md text-label-md text-on-surface-variant block mb-2 font-bold uppercase tracking-wider">Quest Title</label>
-                  <input 
-                    type="text" 
-                    className="w-full bg-surface-container border-0 border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-xl font-headline-sm py-3 px-2 transition-all placeholder:text-outline-variant/50" 
+                  <input
+                    type="text"
+                    className="w-full bg-surface-container border-0 border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-xl font-headline-sm py-3 px-2 transition-all placeholder:text-outline-variant/50"
                     placeholder="e.g. Launch the flag community project..."
                     value={newMajorTitle}
                     onChange={(e) => setNewMajorTitle(e.target.value)}
-                    required 
+                    required
                   />
                 </div>
 
@@ -497,7 +497,7 @@ export default function SeasonOverview() {
                   {/* Category select */}
                   <div>
                     <label className="font-label-md text-label-md text-on-surface-variant block mb-2 font-bold uppercase tracking-wider">Category Branch</label>
-                    <select 
+                    <select
                       className="w-full bg-surface-container border-0 border-b-2 border-outline-variant focus:border-primary focus:ring-0 font-body-md py-3 px-2 text-primary"
                       value={newMajorCategory}
                       onChange={(e) => setNewMajorCategory(e.target.value)}
@@ -511,7 +511,7 @@ export default function SeasonOverview() {
                   {/* Impact Weighting */}
                   <div>
                     <label className="font-label-md text-label-md text-on-surface-variant block mb-2 font-bold uppercase tracking-wider">Impact Weighting</label>
-                    <select 
+                    <select
                       className="w-full bg-surface-container border-0 border-b-2 border-outline-variant focus:border-primary focus:ring-0 font-body-md py-3 px-2 text-primary"
                       value={newMajorImpact}
                       onChange={(e) => setNewMajorImpact(e.target.value)}
@@ -527,13 +527,13 @@ export default function SeasonOverview() {
                 <div>
                   <label className="font-label-md text-label-md text-on-surface-variant block mb-2 font-bold uppercase tracking-wider">The SMART Objective</label>
                   <p className="text-xs text-on-surface-variant italic mb-2">Define your clear, measurable objective. What does the destination look like?</p>
-                  <textarea 
+                  <textarea
                     className="w-full bg-surface-container border-2 border-dashed border-outline-variant rounded-lg p-4 font-body-lg text-body-lg resize-none placeholder:text-outline-variant/60"
                     placeholder="By the end of this season, I will have completed..."
                     value={newMajorDesc}
                     onChange={(e) => setNewMajorDesc(e.target.value)}
                     rows={4}
-                    required 
+                    required
                   />
                 </div>
 
@@ -543,11 +543,10 @@ export default function SeasonOverview() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <button
                       type="button"
-                      className={`flex flex-col text-left p-4 rounded-xl border-2 transition-all group ${
-                        newMajorEffort === "Basic" 
-                          ? "border-secondary bg-secondary-container/20 font-bold" 
+                      className={`flex flex-col text-left p-4 rounded-xl border-2 transition-all group ${newMajorEffort === "Basic"
+                          ? "border-secondary bg-secondary-container/20 font-bold"
                           : "border-outline-variant/30 hover:border-secondary hover:bg-surface-container-high"
-                      }`}
+                        }`}
                       onClick={() => setNewMajorEffort("Basic")}
                     >
                       <span className="font-headline-sm text-on-surface-variant group-hover:text-primary mb-1">Basic</span>
@@ -555,11 +554,10 @@ export default function SeasonOverview() {
                     </button>
                     <button
                       type="button"
-                      className={`flex flex-col text-left p-4 rounded-xl border-2 transition-all group ${
-                        newMajorEffort === "Detailed" 
-                          ? "border-secondary bg-secondary-container/20 font-bold" 
+                      className={`flex flex-col text-left p-4 rounded-xl border-2 transition-all group ${newMajorEffort === "Detailed"
+                          ? "border-secondary bg-secondary-container/20 font-bold"
                           : "border-outline-variant/30 hover:border-secondary hover:bg-surface-container-high"
-                      }`}
+                        }`}
                       onClick={() => setNewMajorEffort("Detailed")}
                     >
                       <span className="font-headline-sm text-primary mb-1">Detailed</span>
@@ -567,11 +565,10 @@ export default function SeasonOverview() {
                     </button>
                     <button
                       type="button"
-                      className={`flex flex-col text-left p-4 rounded-xl border-2 transition-all group ${
-                        newMajorEffort === "Epic" 
-                          ? "border-secondary bg-secondary-container/20 font-bold" 
+                      className={`flex flex-col text-left p-4 rounded-xl border-2 transition-all group ${newMajorEffort === "Epic"
+                          ? "border-secondary bg-secondary-container/20 font-bold"
                           : "border-outline-variant/30 hover:border-secondary hover:bg-surface-container-high"
-                      }`}
+                        }`}
                       onClick={() => setNewMajorEffort("Epic")}
                     >
                       <span className="font-headline-sm text-on-surface-variant group-hover:text-primary mb-1">Epic</span>
@@ -582,15 +579,15 @@ export default function SeasonOverview() {
 
                 {/* Footer Buttons */}
                 <footer className="flex flex-col md:flex-row gap-4 pt-6 border-t border-outline-variant/20">
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="flex-1 bg-primary text-on-primary font-headline-sm py-3 rounded-lg hover:bg-primary-container transition-all flex items-center justify-center gap-2 active:scale-95 shadow-md"
                   >
                     <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
                     Seal Quest in Ledger
                   </button>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="flex-1 border-2 border-secondary text-secondary font-headline-sm py-3 rounded-lg hover:bg-secondary-container/10 transition-all flex items-center justify-center gap-2 active:scale-95"
                     onClick={() => setIsModalOpen(false)}
                   >
