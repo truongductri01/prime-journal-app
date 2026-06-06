@@ -1,0 +1,250 @@
+@import "tailwindcss";
+@source "../components/**/*.{js,ts,jsx,tsx}";
+@source "../app/**/*.{js,ts,jsx,tsx}";
+
+@theme {
+  /* Stitch-inspired Color Palette */
+  --color-primary: #442a22;
+  --color-secondary: #775a19;
+  --color-tertiary: #173626;
+  --color-background: #fdf9f0;
+  
+  --color-surface: #fdf9f0;
+  --color-surface-bright: #fdf9f0;
+  --color-surface-dim: #dddad1;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f7f3ea;
+  --color-surface-container: #f1eee5;
+  --color-surface-container-high: #ece8df;
+  --color-surface-container-highest: #e6e2d9;
+  
+  --color-on-surface: #1c1c16;
+  --color-on-surface-variant: #504441;
+  --color-outline: #827470;
+  --color-outline-variant: #d4c3be;
+  
+  --color-secondary-container: #fed488;
+  --color-on-secondary-container: #785a1a;
+  --color-tertiary-fixed: #c7ebd4;
+  --color-on-tertiary-fixed-variant: #2e4d3c;
+  --color-primary-fixed: #ffdbd0;
+  --color-secondary-fixed: #ffdea5;
+  --color-tertiary-container: #2e4d3c;
+  --color-on-tertiary-container: #9abda7;
+
+  /* Typography Fonts */
+  --font-serif: 'Literata', Georgia, serif;
+  --font-sans: 'Manrope', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Custom Spacings */
+  --spacing-margin-page: 48px;
+  --spacing-stack-sm: 12px;
+  --spacing-gutter-mobile: 16px;
+  --spacing-stack-md: 24px;
+  --spacing-unit: 8px;
+  --spacing-container-max-width: 1120px;
+  --spacing-stack-lg: 48px;
+  --spacing-gutter-desktop: 32px;
+}
+
+/* Base resets & custom variables */
+:root {
+  --canvas: #EFE7DA;
+  --page: #F7F3EA;
+  --walnut: #442A22;
+}
+
+body {
+  background-color: var(--canvas);
+  color: #1c1c16;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--color-primary);
+}
+
+/* Custom Stitch Utility Classes */
+.parchment-texture {
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+  background-repeat: repeat;
+}
+
+.journal-texture {
+  background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+  opacity: 0.45;
+}
+
+.inset-shadow {
+  box-shadow: inset 0 2px 4px 0 rgba(68, 42, 34, 0.08);
+}
+
+.raised-card {
+  box-shadow: 0 4px 20px rgba(68, 42, 34, 0.05);
+  border: 1px solid rgba(161, 136, 127, 0.15);
+}
+
+.quest-card {
+  background-color: #fdf9f0;
+  border: 1px solid rgba(161, 136, 127, 0.2);
+  box-shadow: 0 4px 20px rgba(68, 42, 34, 0.05);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+}
+
+.quest-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 10px 30px rgba(68, 42, 34, 0.1);
+  border-color: rgba(68, 42, 34, 0.35);
+}
+
+.main-quest-glow {
+  box-shadow: 0 0 25px rgba(254, 212, 136, 0.4);
+  border: 2px solid #fed488;
+}
+
+.page-canvas {
+  background-color: #F7F3EA; /* The Page */
+  border: 1px solid rgba(68, 42, 34, 0.1); /* Walnut outline */
+}
+
+.inset-track {
+  box-shadow: inset 0 2px 4px rgba(68, 42, 34, 0.08);
+  background-color: #f5efe4;
+}
+
+.stamp-effect {
+  filter: drop-shadow(0 0 2px rgba(119, 90, 25, 0.3));
+}
+
+.stamp-fade-in {
+  animation: stampFade 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes stampFade {
+  0% { opacity: 0; transform: scale(2) rotate(-15deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-5deg); }
+}
+
+.glow-pulse {
+  animation: glow 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(254, 212, 136, 0.25); }
+  50% { box-shadow: 0 0 40px rgba(254, 212, 136, 0.55); }
+}
+
+.checkbox-custom {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #A1887F;
+  border-radius: 6px;
+  background: #F5EFE4;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checkbox-custom::before {
+  content: "check";
+  font-family: 'Material Symbols Outlined';
+  font-size: 18px;
+  color: white;
+  transform: scale(0);
+  transition: 0.12s transform ease-in-out;
+}
+
+.checkbox-custom:checked {
+  background-color: #442a22;
+  border-color: #442a22;
+}
+
+.checkbox-custom:checked::before {
+  transform: scale(1);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1eee5;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #a1887f;
+  border-radius: 10px;
+}
+
+/* Material Icons setting overrides */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Utility layout helpers */
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Stitch Design System Utilities */
+.tactile-card {
+  box-shadow: 0 4px 20px 0 rgba(68, 42, 34, 0.05);
+  border: 1px solid rgba(161, 136, 127, 0.1);
+}
+
+.accent-line-sage { border-left: 4px solid #9abda7; }
+.accent-line-clay { border-left: 4px solid #d4c3be; }
+.accent-line-gold { border-left: 4px solid #fed488; }
+
+.ledger-line {
+  background-image: linear-gradient(to bottom, transparent 95%, #A1887F 95%);
+  background-size: 100% 2rem;
+}
+
+.grain-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.03;
+  background-image: url("https://www.transparenttextures.com/patterns/p6.png");
+}
+
+.gold-shimmer {
+  background: linear-gradient(90deg, #775a19 0%, #fed488 50%, #775a19 100%);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+
+.seal-animation {
+  animation: seal-drop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes seal-drop {
+  0% { transform: scale(2); opacity: 0; filter: blur(10px); }
+  100% { transform: scale(1); opacity: 1; filter: blur(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
