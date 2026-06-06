@@ -15,6 +15,7 @@ import {
 } from "@/lib/cosmos";
 import { CompletionGuard } from "@/components/CompletionGuard";
 import { CelebrationOverlay } from "@/components/CelebrationOverlay";
+import { createPortal } from "react-dom";
 import {
   triggerStandardClearConfetti,
   triggerCodexRollConfetti,
@@ -38,6 +39,10 @@ export default function Home() {
   // Completion modal states
   const [activeTaskToComplete, setActiveTaskToComplete] = useState<any>(null);
   const [celebrationInfo, setCelebrationInfo] = useState<any>(null);
+  
+  // Task detail modal state
+  const [viewingTask, setViewingTask] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
 
   // Minor quests across active majors
   const [upcomingMinors, setUpcomingMinors] = useState<any[]>([]);
@@ -143,6 +148,7 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setMounted(true);
     loadData();
 
     window.addEventListener("local-db-update", loadData);
@@ -562,9 +568,9 @@ export default function Home() {
               ) : (
                 <div className="flex flex-col gap-2.5">
                   {todayFocusPreview.map((task) => (
-                    <label
+                    <div
                       key={task.id}
-                      className="flex items-center gap-3 p-2 hover:bg-surface-container-low transition-colors rounded-lg cursor-pointer group"
+                      className="flex items-center gap-3 p-2 hover:bg-surface-container-low transition-colors rounded-lg group"
                     >
                       <input
                         className="w-5 h-5 rounded-full border-secondary text-secondary focus:ring-secondary cursor-pointer"
@@ -572,12 +578,14 @@ export default function Home() {
                         checked={task.status === "completed"}
                         onChange={() => handleTaskCompleteCheck(task)}
                       />
-                      <span className={`text-body-md font-body-md text-on-surface group-hover:text-primary leading-tight ${task.status === "completed" ? "line-through opacity-60 text-on-surface-variant" : ""
-                        }`}>
+                      <span 
+                        className={`text-body-md font-body-md text-on-surface hover:text-primary cursor-pointer leading-tight flex-1 ${task.status === "completed" ? "line-through opacity-60 text-on-surface-variant" : ""}`}
+                        onClick={() => setViewingTask(task)}
+                      >
                         {task.isPinned && <span className="text-secondary mr-1">📌</span>}
                         {task.title}
                       </span>
-                    </label>
+                    </div>
                   ))}
                 </div>
               )}
@@ -668,6 +676,62 @@ export default function Home() {
           stepsRecorded={celebrationInfo.stepsRecorded}
           onClose={() => setCelebrationInfo(null)}
         />
+      )}
+
+      {/* Task Details Modal */}
+      {viewingTask && mounted && createPortal(
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 transition-opacity"
+          onClick={() => setViewingTask(null)}
+        >
+          <div 
+            className="w-full max-w-[500px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture animate-in fade-in zoom-in-95 duration-200 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center pb-4 border-b border-outline-variant/20 mb-6">
+               <h3 className="font-headline-sm text-primary flex items-center gap-2">
+                 <span className="material-symbols-outlined">track_changes</span>
+                 Task Details
+               </h3>
+               <button className="text-on-surface-variant hover:text-primary" onClick={() => setViewingTask(null)}>
+                 <span className="material-symbols-outlined">close</span>
+               </button>
+            </div>
+            <div className="space-y-6">
+               <div>
+                 <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-2 font-bold">Objective</span>
+                 <p className="font-body-lg text-primary leading-snug">{viewingTask.title}</p>
+               </div>
+               <div className="grid grid-cols-2 gap-4">
+                 <div className="bg-surface-container p-3 rounded-lg border border-outline-variant/20">
+                   <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1 font-bold">Status</span>
+                   <span className="badge badge-slate uppercase tracking-wider text-[10px]">{viewingTask.status}</span>
+                 </div>
+                 <div className="bg-surface-container p-3 rounded-lg border border-outline-variant/20">
+                   <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1 font-bold">Estimated Effort</span>
+                   <span className="font-mono text-sm text-primary font-bold">{viewingTask.estimateMinutes} mins</span>
+                 </div>
+               </div>
+               {viewingTask.notes && (
+                 <div>
+                   <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-2 font-bold">Codex Notes</span>
+                   <p className="font-body-md text-on-surface-variant p-4 bg-surface-container-highest rounded-lg italic border border-outline-variant/10 shadow-inner">
+                     {viewingTask.notes}
+                   </p>
+                 </div>
+               )}
+            </div>
+            <div className="mt-8 pt-6 border-t border-outline-variant/20 flex justify-end">
+              <button 
+                className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md hover:bg-primary-container transition-colors active:scale-95 shadow-md flex items-center gap-2"
+                onClick={() => setViewingTask(null)}
+              >
+                Return to Dashboard
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
 
     </div>
