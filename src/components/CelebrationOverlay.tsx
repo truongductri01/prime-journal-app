@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface CelebrationOverlayProps {
   isOpen: boolean;
@@ -40,9 +41,9 @@ export function CelebrationOverlay({
     }
   }, [isOpen]);
 
-  if (!rendered || !isOpen) return null;
+  if (!rendered || !isOpen || typeof document === 'undefined') return null;
 
-  return (
+  return createPortal(
     <div 
       className="fixed inset-0 z-[2000] flex items-center justify-center px-4 bg-primary/30 backdrop-blur-md transition-all duration-500 animate-fade-in"
       id="celebration-overlay"
@@ -255,6 +256,7 @@ export function CelebrationOverlay({
           </button>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }

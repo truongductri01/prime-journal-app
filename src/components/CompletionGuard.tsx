@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface CompletionGuardProps {
   isOpen: boolean;
@@ -22,8 +23,13 @@ export function CompletionGuard({
   const [rating, setRating] = useState<number>(1);
   const [note, setNote] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [mounted, setMounted] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,14 +42,20 @@ export function CompletionGuard({
     setNote("");
   };
 
-  return (
-    <div className="clover-modal-overlay" style={{ position: "fixed", zIndex: 2000 }}>
-      <div className="clover-modal" style={{ textAlign: "left", maxWidth: "600px", border: "2px solid var(--azure-blue)" }}>
-        <h3 style={{ marginBottom: "0.5rem", borderBottom: "1px solid var(--border-color)", paddingBottom: "0.5rem" }}>
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-opacity animate-fade-in"
+      onClick={onClose}
+    >
+      <div 
+        className="w-full max-w-[600px] bg-surface-container-low p-8 rounded-xl border border-primary text-left raised-card parchment-texture shadow-2xl relative overflow-y-auto max-h-[90vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="font-headline-sm text-primary mb-2 border-b border-outline-variant/30 pb-4">
           Completion Guard: {taskTitle}
         </h3>
         
-        <p style={{ fontSize: "0.9rem", color: "var(--ink-secondary)", marginBottom: "1rem" }}>
+        <p className="font-body-md text-on-surface-variant mb-6">
           Verify your execution quality to lock in your Experience Points (XP).
         </p>
 
@@ -180,6 +192,7 @@ export function CompletionGuard({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

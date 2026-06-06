@@ -460,24 +460,34 @@ export default function MinorQuestDetail() {
                 return (
                   <div
                     key={task.id}
-                    className={`raised-card bg-surface-container-lowest p-3 rounded-lg flex items-center justify-between border-l-4 border-outline-variant/20 hover:border-primary/20 transition-all cursor-pointer ${isCompleted ? 'opacity-60 bg-surface-container-low' : ''
-                      }`}
-                    onClick={() => setEditingTask(task)}
+                    className={`raised-card bg-surface-container-lowest p-3 rounded-lg flex items-center justify-between border-l-4 border-outline-variant/20 hover:border-primary/20 transition-all ${isCompleted ? 'opacity-60 bg-surface-container-low' : ''}`}
                   >
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        checked={isCompleted}
-                        disabled={isCompleted}
-                        onChange={() => handleTaskCheck(task)}
-                        onClick={(e) => e.stopPropagation()}
-                        className="w-5 h-5 rounded text-secondary focus:ring-secondary cursor-pointer"
-                      />
-                      <span
-                        className={`text-body-md text-primary leading-tight font-medium hover:text-secondary ${isCompleted ? 'line-through text-on-surface-variant' : ''}`}
+                    <div className="flex items-center gap-3 w-full">
+                      <div 
+                        className="flex-shrink-0 flex items-center cursor-pointer p-1 -m-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (!isCompleted) handleTaskCheck(task);
+                        }}
                       >
-                        {task.title}
-                      </span>
+                        <input
+                          type="checkbox"
+                          checked={isCompleted}
+                          disabled={isCompleted}
+                          readOnly
+                          className="w-5 h-5 rounded text-secondary focus:ring-secondary cursor-pointer pointer-events-none"
+                        />
+                      </div>
+                      <div
+                        className="flex-grow cursor-pointer py-1"
+                        onClick={() => setEditingTask(task)}
+                      >
+                        <span
+                          className={`text-body-md text-primary leading-tight font-medium hover:text-secondary ${isCompleted ? 'line-through text-on-surface-variant' : ''}`}
+                        >
+                          {task.title}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-2">
