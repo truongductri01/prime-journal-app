@@ -39,7 +39,7 @@ export default function Home() {
   // Completion modal states
   const [activeTaskToComplete, setActiveTaskToComplete] = useState<any>(null);
   const [celebrationInfo, setCelebrationInfo] = useState<any>(null);
-  
+
   // Task detail modal state
   const [viewingTask, setViewingTask] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
@@ -423,13 +423,13 @@ export default function Home() {
               alt="Watercolor Oak Forest at Sunrise"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9flNlPHyzaMkGohgaXwmv0mRjB3RiHVsUcvlsug60pGI_DVmDY9IpGvBUAwQJj3Ugu1w6gkTY--SDEBAq4V6e1T2qrnJdV57uuCPGSCdjegBlEv1DQ5f1PogzgH82dndd95hWH6LIvpu_Fxi3O0GDo9Vrx_YdWw__7LfJoZyy9FmBww8q-CfhYhTREJx-BFK66yRKj_1YstmXSsnTY0wJt8gAXk_pdlF1pqIBpWxSnfj3ekz6yh8jDwCgW11P18LmyhSGgwdcYJB3"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex flex-col justify-end p-6">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-6">
               <div className="flex justify-between items-end">
                 <div>
-                  <span className="text-on-primary font-label-sm uppercase tracking-widest mb-1 block">Current Chapter</span>
-                  <h1 className="text-on-primary font-display-lg-mobile md:text-display-lg leading-tight">{activeSeason.title}</h1>
+                  <span className="!text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-label-sm uppercase tracking-widest mb-1 block">Current Chapter</span>
+                  <h1 className="!text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] font-display-lg-mobile md:text-display-lg leading-tight">{activeSeason.title}</h1>
                 </div>
-                <span className="text-on-primary/80 font-mono text-label-sm hide-mobile">
+                <span className="!text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-mono text-label-sm hide-mobile">
                   {remainingDays > 0 ? `${remainingDays} days remaining` : "Season timeline concluded"}
                 </span>
               </div>
@@ -581,7 +581,7 @@ export default function Home() {
                         checked={task.status === "completed"}
                         onChange={() => handleTaskCompleteCheck(task)}
                       />
-                      <span 
+                      <span
                         className={`text-body-md font-body-md text-on-surface hover:text-primary cursor-pointer leading-tight flex-1 ${task.status === "completed" ? "line-through opacity-60 text-on-surface-variant" : ""}`}
                         onClick={() => setViewingTask(task)}
                       >
@@ -693,61 +693,61 @@ export default function Home() {
 
       {/* Task Details Modal */}
       {viewingTask && mounted && createPortal(
-        <div 
+        <div
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 transition-opacity cursor-pointer"
           onClick={() => setViewingTask(null)}
         >
-          <div 
+          <div
             className="w-full max-w-[500px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture animate-in fade-in zoom-in-95 duration-200 shadow-2xl cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-4 border-b border-outline-variant/20 mb-6">
-               <h3 className="font-headline-sm text-primary flex items-center gap-2">
-                 <span className="material-symbols-outlined">track_changes</span>
-                 Task Details
-               </h3>
-               <button className="text-on-surface-variant hover:text-primary" onClick={() => setViewingTask(null)}>
-                 <span className="material-symbols-outlined">close</span>
-               </button>
+              <h3 className="font-headline-sm text-primary flex items-center gap-2">
+                <span className="material-symbols-outlined">track_changes</span>
+                Task Details
+              </h3>
+              <button className="text-on-surface-variant hover:text-primary" onClick={() => setViewingTask(null)}>
+                <span className="material-symbols-outlined">close</span>
+              </button>
             </div>
             <div className="space-y-6">
-               <div>
-                 <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-2 font-bold">Objective</span>
-                 <p className="font-body-lg text-primary leading-snug flex items-center gap-3">
-                   {viewingTask.title}
-                   {viewingTask.minorQuestId && (
-                     <span className="bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider shadow-sm">Quest</span>
-                   )}
-                 </p>
-               </div>
-               <div className="grid grid-cols-2 gap-4">
-                 <div className="bg-surface-container p-3 rounded-lg border border-outline-variant/20">
-                   <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1 font-bold">Status</span>
-                   <div className="flex items-center gap-2">
-                     <span className="badge badge-slate uppercase tracking-wider text-[10px]">{viewingTask.status}</span>
-                     {viewingTask.status === "completed" && viewingTask.minorQuestId && viewingTask.rating > 0 && (
-                       <span className="text-secondary text-sm flex tracking-tighter" title={`${viewingTask.rating} Star Rating`}>
-                         {Array.from({ length: viewingTask.rating }).map((_, i) => "★").join("")}
-                       </span>
-                     )}
-                   </div>
-                 </div>
-                 <div className="bg-surface-container p-3 rounded-lg border border-outline-variant/20">
-                   <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1 font-bold">Estimated Effort</span>
-                   <span className="font-mono text-sm text-primary font-bold">{viewingTask.estimateMinutes} mins</span>
-                 </div>
-               </div>
-               {viewingTask.notes && (
-                 <div>
-                   <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-2 font-bold">Codex Notes</span>
-                   <p className="font-body-md text-on-surface-variant p-4 bg-surface-container-highest rounded-lg italic border border-outline-variant/10 shadow-inner">
-                     {viewingTask.notes}
-                   </p>
-                 </div>
-               )}
+              <div>
+                <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-2 font-bold">Objective</span>
+                <p className="font-body-lg text-primary leading-snug flex items-center gap-3">
+                  {viewingTask.title}
+                  {viewingTask.minorQuestId && (
+                    <span className="bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider shadow-sm">Quest</span>
+                  )}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-surface-container p-3 rounded-lg border border-outline-variant/20">
+                  <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1 font-bold">Status</span>
+                  <div className="flex items-center gap-2">
+                    <span className="badge badge-slate uppercase tracking-wider text-[10px]">{viewingTask.status}</span>
+                    {viewingTask.status === "completed" && viewingTask.minorQuestId && viewingTask.rating > 0 && (
+                      <span className="text-secondary text-sm flex tracking-tighter" title={`${viewingTask.rating} Star Rating`}>
+                        {Array.from({ length: viewingTask.rating }).map((_, i) => "★").join("")}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="bg-surface-container p-3 rounded-lg border border-outline-variant/20">
+                  <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-1 font-bold">Estimated Effort</span>
+                  <span className="font-mono text-sm text-primary font-bold">{viewingTask.estimateMinutes} mins</span>
+                </div>
+              </div>
+              {viewingTask.notes && (
+                <div>
+                  <span className="font-label-sm text-on-surface-variant uppercase tracking-wider block mb-2 font-bold">Codex Notes</span>
+                  <p className="font-body-md text-on-surface-variant p-4 bg-surface-container-highest rounded-lg italic border border-outline-variant/10 shadow-inner">
+                    {viewingTask.notes}
+                  </p>
+                </div>
+              )}
             </div>
             <div className="mt-8 pt-6 border-t border-outline-variant/20 flex justify-end">
-              <button 
+              <button
                 className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md hover:bg-primary-container transition-colors active:scale-95 shadow-md flex items-center gap-2"
                 onClick={() => setViewingTask(null)}
               >
