@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { createPortal } from "react-dom";
 import { 
   localGetSeasons, 
   localGetQuests, 
@@ -16,6 +17,7 @@ export default function SeasonOverview() {
   const [allQuests, setAllQuests] = useState<any[]>([]);
   const [allTasks, setAllTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   // Filter states
   const [categoryFilter, setCategoryFilter] = useState("All");
@@ -52,6 +54,7 @@ export default function SeasonOverview() {
   };
 
   useEffect(() => {
+    setMounted(true);
     loadData();
     window.addEventListener("local-db-update", loadData);
     return () => window.removeEventListener("local-db-update", loadData);
@@ -448,9 +451,15 @@ export default function SeasonOverview() {
       </section>
 
       {/* Create Major Modal (Stitch Create / Edit Quest Page Form Design) */}
-      {isModalOpen && (
-        <div className="clover-modal-overlay z-[2100]">
-          <div className="clover-modal w-full max-w-[680px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture overflow-y-auto max-h-[90vh]">
+      {isModalOpen && mounted && createPortal(
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 transition-opacity"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div 
+            className="w-full max-w-[680px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 text-left raised-card parchment-texture overflow-y-auto max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between items-center pb-4 border-b border-outline-variant/20 mb-6">
               <h3 className="font-headline-sm text-primary flex items-center gap-2">
                 <span className="material-symbols-outlined">history_edu</span>
@@ -592,7 +601,8 @@ export default function SeasonOverview() {
               </form>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>
