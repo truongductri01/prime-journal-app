@@ -14,6 +14,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
   const [backlogTasks, setBacklogTasks] = useState<any[]>([]);
   const [committedIds, setCommittedIds] = useState<string[]>([]);
   const [timeBudget, setTimeBudget] = useState(480); // Default minutes
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const pathname = usePathname();
 
@@ -50,6 +51,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     refreshState();
+    setIsSidebarOpen(false); // Close sidebar on route change
 
     window.addEventListener("local-db-update", refreshState);
     return () => window.removeEventListener("local-db-update", refreshState);
@@ -175,23 +177,43 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen">
-      {/* 1. Mobile Header (Stitch design) */}
-      <header className="md:hidden flex justify-between items-center w-full px-gutter-mobile h-16 bg-surface border-b border-outline-variant/20 sticky top-0 z-50">
-        <span className="font-headline-sm text-headline-sm text-primary">Quest Journey</span>
+      {/* 1. Global Header */}
+      <header className="flex justify-between items-center w-full px-4 h-16 bg-surface border-b border-outline-variant/20 sticky top-0 z-30">
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setIsSidebarOpen(true)}
+            className="p-1 text-primary hover:bg-surface-container-high rounded-full transition-colors flex items-center justify-center"
+          >
+            <span className="material-symbols-outlined text-[24px]">menu</span>
+          </button>
+          <span className="font-headline-sm text-headline-sm text-primary">Quest Journey</span>
+        </div>
         <div className="flex items-center gap-3">
           <button
             onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { ctrlKey: true, key: "k" }))}
-            className="p-1 text-primary hover:text-secondary"
+            className="p-1 text-primary hover:text-secondary flex items-center justify-center"
             title="Toggle Co-Pilot Console"
           >
             <span className="material-symbols-outlined text-[20px]">smart_toy</span>
           </button>
-          <span className="material-symbols-outlined text-primary">person</span>
+          <span className="material-symbols-outlined text-primary flex items-center justify-center">person</span>
         </div>
       </header>
 
-      {/* 2. Desktop SideNavBar (Stitch design) */}
-      <aside className="hidden md:flex flex-col p-4 gap-4 h-full w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant/10 z-40">
+      {/* Sidebar Backdrop Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* 2. SideNavBar (Collapsible Modal) */}
+      <aside 
+        className={`flex flex-col p-4 gap-4 h-full w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant/10 z-50 transform transition-transform duration-300 ease-in-out shadow-2xl ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
         <div className="mt-4 px-4 mb-4">
           <h2 className="font-headline-sm text-headline-sm text-primary leading-tight">Quest Journey</h2>
           <p className="font-label-sm text-on-surface-variant opacity-70">Season of the Oak</p>
@@ -289,7 +311,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
       </nav>
 
       {/* Main Content Area */}
-      <main className="md:pl-64 pt-6 pb-24 md:pb-12 min-h-screen relative overflow-hidden">
+      <main className="pt-6 pb-24 md:pb-12 min-h-screen relative overflow-hidden">
         <div className="absolute inset-0 journal-texture pointer-events-none"></div>
         <div className="max-w-[1120px] mx-auto px-4 md:px-8 relative z-10">
           {children}
